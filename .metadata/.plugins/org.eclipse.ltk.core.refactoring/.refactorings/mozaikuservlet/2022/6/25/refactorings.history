@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="&apos;javabeans.js&apos; を &apos;model&apos; に移動" description="&apos;javabeans.js&apos; を &apos;model&apos; に移動" destination="src/model" element1="src/main/webapp/javabeans.js" flags="7" id="org.eclipse.ltk.core.refactoring.move.resources" resources="1" stamp="1655530360010" updateReferences="true"/>
+</session>

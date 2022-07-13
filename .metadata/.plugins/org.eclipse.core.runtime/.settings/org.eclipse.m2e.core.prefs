@@ -1,0 +1,5 @@
+eclipse.m2.autoUpdateProjects=true
+eclipse.m2.defaultPomEditorPage=true
+eclipse.m2.downloadSources=true
+eclipse.m2.userSettingsFile=/usr/local/Cellar/maven/conf/settings.xml
+eclipse.preferences.version=1

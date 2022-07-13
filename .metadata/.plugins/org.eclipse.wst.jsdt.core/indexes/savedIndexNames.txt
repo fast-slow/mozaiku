@@ -1,0 +1,2 @@
+INDEX VERSION 1.4+/Users/sakamakiharuto/Desktop/研究/sourcecode/v4/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
+398033300.index

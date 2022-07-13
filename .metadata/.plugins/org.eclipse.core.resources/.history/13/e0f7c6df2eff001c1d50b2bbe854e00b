@@ -1,0 +1,16 @@
+package mozaikujava;
+
+public class servletmain {
+
+	public static void main(String[] args) {
+		
+	}
+	public static String mozaiku(String startimg,String goalimg,String savefile) {
+		System.out.println("実行");
+		String resultpath = mozaiku.excecution(startimg, goalimg,savefile);
+		return resultpath;
+		
+	}
+	
+
+}

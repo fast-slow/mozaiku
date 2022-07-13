@@ -1,0 +1,10 @@
+127.0.0.1 - - [13/Jul/2022:15:01:06 +0900] "GET / HTTP/1.1" 404 901
+0:0:0:0:0:0:0:1 - - [13/Jul/2022:15:01:08 +0900] "GET /mozaikuservlet/ HTTP/1.1" 200 2561
+0:0:0:0:0:0:0:1 - - [13/Jul/2022:15:01:08 +0900] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 933
+0:0:0:0:0:0:0:1 - - [13/Jul/2022:15:01:08 +0900] "GET /apple-touch-icon.png HTTP/1.1" 404 921
+0:0:0:0:0:0:0:1 - - [13/Jul/2022:15:01:47 +0900] "POST /mozaikuservlet/ HTTP/1.1" 200 181
+0:0:0:0:0:0:0:1 - - [13/Jul/2022:15:01:47 +0900] "GET /mozaikuservlet/result/compare.jpg HTTP/1.1" 200 100873
+127.0.0.1 - - [13/Jul/2022:18:13:53 +0900] "GET / HTTP/1.1" 404 901
+0:0:0:0:0:0:0:1 - - [13/Jul/2022:18:13:54 +0900] "GET /mozaikuservlet/ HTTP/1.1" 200 2561
+0:0:0:0:0:0:0:1 - - [13/Jul/2022:18:14:18 +0900] "POST /mozaikuservlet/ HTTP/1.1" 200 181
+0:0:0:0:0:0:0:1 - - [13/Jul/2022:18:14:18 +0900] "GET /mozaikuservlet/result/compare.jpg HTTP/1.1" 200 108688
