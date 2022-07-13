@@ -17,6 +17,8 @@
         <artifactId>maven-war-plugin</artifactId>
         <version>3.2.3</version>
       </plugin>
+    </plugins>
+    <plugins>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
@@ -37,6 +39,6 @@
                 </execution>
             </executions>
         </plugin>
-      </plugins>
+　　　</plugins>
   </build>
 </project>
