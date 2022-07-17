@@ -65,6 +65,9 @@ public class mozaiku {
 		}
 	}
 	
+	public static void reset2() {
+		
+	}
 	
 	 public static void fileClass(File TestFile) {
 	        if (TestFile.exists()) {

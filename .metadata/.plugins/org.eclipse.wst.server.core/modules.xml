@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <modules>
   <module moduleId="org.eclipse.jst.jee.server:mozaikuservlet" serverId="localhost の Tomcat v9.0 サーバー"/>
+  <module moduleId="org.eclipse.jst.jee.server:mozaikuheroku" serverId="localhost の Tomcat v9.0 サーバー"/>
 </modules>
