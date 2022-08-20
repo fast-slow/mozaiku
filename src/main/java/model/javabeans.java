@@ -10,6 +10,7 @@ public class javabeans implements java.io.Serializable{
     private String action = "";
     private String resultpath;
     private String imginpath;
+    private String resultfoldername;
     //(2)変数にデータを保存するsetメソッドを宣言します。
     public void setstartimgpath(String startimgpath) {
         this.startimgpath = startimgpath;
@@ -53,5 +54,11 @@ public class javabeans implements java.io.Serializable{
     }
     public String getimginpath() {
     	return this.imginpath;
+    }
+    public void setresultfoldername(String resultfoldername) {
+    	this.resultfoldername = resultfoldername;
+    }
+    public String getresultfoldername() {
+    	return this.resultfoldername;
     }
 }

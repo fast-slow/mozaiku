@@ -5,9 +5,11 @@ public class servletmain {
 	public static void main(String[] args) {
 		
 	}
-	public static Object mozaiku(String startimg,String goalimg,String savefile) {
+	public Object mozaiku(String startimg,String goalimg,String savefile) {
+		
 		System.out.println("実行");
-		return mozaiku.excecution(startimg, goalimg,savefile);
+		mozaiku mo = new mozaiku();
+		return mo.excecution(startimg, goalimg,savefile);
 	}
 	
 

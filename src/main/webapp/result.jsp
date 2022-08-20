@@ -17,11 +17,12 @@
 javabeans javabeans = (javabeans) session.getAttribute("javabeans");
 String resultpath = javabeans.getresultpath();
 String startimgpath = javabeans.getstartimgpath();
-System.out.println(resultpath);
+String resultfoldername = javabeans.getresultfoldername();
+System.out.println(resultfoldername);
 %>
 <%-- 
 <img src = "${pageContext.request.contextPath}/compare.jpg"　alt = "リスト"  >
 --%>
-<img src = "result/compare.jpg" alt = "リスト"  >
+<img src = <%=resultfoldername+"/compare.jpg"%> alt = "リスト"  >
 </body>
 </html>

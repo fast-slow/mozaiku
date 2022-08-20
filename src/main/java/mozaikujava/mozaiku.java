@@ -1,6 +1,5 @@
 package mozaikujava;
 import static mozaikujava.ImageUtility.*;
-
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -8,47 +7,77 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Date;
 import javax.imageio.ImageIO;
+
 
 public class mozaiku {
 	public static int box = 10;
 	public static int widthsize = 400;
-	static Path path = Paths.get("");
+	Path path = Paths.get("");
 	//static String currentpath = path.toAbsolutePath().toString();
-	static String currentpath = path.toAbsolutePath().toString();
+	String currentpath = this.path.toAbsolutePath().toString();
+	String resultpath;
+	BufferedImage startimg = new BufferedImage(widthsize, widthsize, BufferedImage.TYPE_INT_RGB);
+	BufferedImage changeimg = new BufferedImage(widthsize, widthsize, BufferedImage.TYPE_INT_RGB);
+	BufferedImage goalimg = new BufferedImage(widthsize, widthsize, BufferedImage.TYPE_INT_RGB);
+	BufferedImage completeimg = new BufferedImage(widthsize, widthsize, BufferedImage.TYPE_INT_RGB);
+	BufferedImage compareimg = new BufferedImage(widthsize*4, widthsize, BufferedImage.TYPE_INT_RGB);
+	int[][][] startimgi = new int[widthsize][widthsize][3];
+	int[][][] changeimgi = new int[widthsize][widthsize][3];
+	int[][][] goalimgi = new int[widthsize][widthsize][3];
+	int[][][] completeimgi = new int[widthsize][widthsize][3];
+	int[][][] startcanny;
+	int[][][] goalcanny;
 	
-	static BufferedImage startimg = new BufferedImage(widthsize, widthsize, BufferedImage.TYPE_INT_RGB);
-	static BufferedImage changeimg = new BufferedImage(widthsize, widthsize, BufferedImage.TYPE_INT_RGB);
-	static BufferedImage goalimg = new BufferedImage(widthsize, widthsize, BufferedImage.TYPE_INT_RGB);
-	static BufferedImage completeimg = new BufferedImage(widthsize, widthsize, BufferedImage.TYPE_INT_RGB);
-	static BufferedImage compareimg = new BufferedImage(widthsize*4, widthsize, BufferedImage.TYPE_INT_RGB);
-	static int[][][] startimgi = new int[widthsize][widthsize][3];
-	static int[][][] changeimgi = new int[widthsize][widthsize][3];
-	static int[][][] goalimgi = new int[widthsize][widthsize][3];
-	static int[][][] completeimgi = new int[widthsize][widthsize][3];
-	static int[][][] startcanny;
-	static int[][][] goalcanny;
 	static ArrayList<ArrayList<Integer[]>> cutposition = new ArrayList<>();
 	
 	
 	public static void main(String[] args) {
-		mozaikumain();
-		
+		mozaiku mo = new mozaiku();
+		mo.mozaikumain();
 	}
 	
-	public static void reset() {
-		Path p1 = Paths.get(currentpath+"/result");
-		Path p2 = Paths.get(currentpath+"/result/result_1");
-		Path p3 = Paths.get(currentpath+"/result/result_2");
-		Path p4 = Paths.get(currentpath+"/result/result_mv");
-		Path p5 = Paths.get(currentpath+"/result/result_parts");
-		Path p6 = Paths.get(currentpath+"/result/result_parts2");
-		Path p7 = Paths.get(currentpath+"/result/trim");
-		Path p8 = Paths.get(currentpath+"/result/trim_target");
-		Path p9 = Paths.get(currentpath+"/result/trim2");
-		
+	public void reset() {
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd");
+		String preresultpath = this.currentpath+"/result"+sdf.format(date);
+		File dir = new File(this.currentpath);
+		ArrayList<String> refiles = new ArrayList<String>();
+	    File[] files = dir.listFiles();
+	    int count = 1;
+	    for (int i = 0; i < files.length; i++) {
+	        File file = files[i];
+	        refiles.add(file.toString());
+	    }
+	    while(true) {
+	    	if(refiles.contains(preresultpath+String.valueOf(count))) {
+	    		count++;
+	    	}else {
+	    		resultpath = preresultpath+String.valueOf(count);
+	    		break;
+	    	}
+	    }
+		if(count == 1) {
+			for(int i = 0; i < refiles.size(); i++) {
+				if(refiles.get(i).contains(this.currentpath+"/result")) {
+					fileClass(new File(refiles.get(i)));
+				}
+			}
+			
+		}
+		Path p1 = Paths.get(resultpath);
+		Path p2 = Paths.get(resultpath+"/result_1");
+		Path p3 = Paths.get(resultpath+"/result_2");
+		Path p4 = Paths.get(resultpath+"/result_mv");
+		Path p5 = Paths.get(resultpath+"/result_parts");
+		Path p6 = Paths.get(resultpath+"/result_parts2");
+		Path p7 = Paths.get(resultpath+"/trim");
+		Path p8 = Paths.get(resultpath+"/trim_target");
+		Path p9 = Paths.get(resultpath+"/trim2");
+		System.out.println(resultpath);
 		try {
 			fileClass(new File(p1.toString()));
 			Files.createDirectory(p1);
@@ -64,6 +93,9 @@ public class mozaiku {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
+	}
+	public static void reset2() {
+		
 	}
 	
 	
@@ -91,7 +123,7 @@ public class mozaiku {
 	        }
 	    }
 	
-	public static void register(String startimgpath,String changeimgpath,String goalimgpath) {
+	public void register(String startimgpath,String changeimgpath,String goalimgpath) {
 		try {
 			BufferedImage prestartimg = ImageIO.read(new File(startimgpath));
 			BufferedImage prechangeimg = ImageIO.read(new File(changeimgpath));
@@ -128,15 +160,15 @@ public class mozaiku {
 			goalcannyimg.setRGB(w,h,rgb(goalcanny[w][h][0],goalcanny[w][h][1],goalcanny[w][h][2]));
 		}
 		try {
-			ImageIO.write(startcannyimg, "jpg", new File(currentpath+"/result/startcanny.jpg"));
-			ImageIO.write(goalcannyimg, "jpg", new File(currentpath+"/result/goalcanny.jpg"));
+			ImageIO.write(startcannyimg, "jpg", new File(resultpath+"/startcanny.jpg"));
+			ImageIO.write(goalcannyimg, "jpg", new File(resultpath+"/goalcanny.jpg"));
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
 	}
 	
-	public static void impoint(BufferedImage img) {
+	public void impoint(BufferedImage img) {
 		int cutwidth = widthsize/box;
 		for(int i = 0; i < box*box; i++) {
 			int boxh = i/box;
@@ -152,7 +184,7 @@ public class mozaiku {
 		}
 	}
 	
-	public static void trim(BufferedImage img,int boxsize, int i) {
+	public void trim(BufferedImage img,int boxsize, int i) {
 		BufferedImage write = new BufferedImage(boxsize,boxsize, BufferedImage.TYPE_INT_RGB);
 		for (int j=0; j<boxsize*boxsize; j++) {
 			int boxh = i/box;
@@ -163,13 +195,14 @@ public class mozaiku {
 			write.setRGB(w,h,rgb);
 		}
 		try {
-			ImageIO.write(write, "jpg", new File(currentpath+"/result/trim/"+Integer.valueOf(i).toString()+".jpg"));
+			ImageIO.write(write, "jpg", new File(resultpath+"/trim/"+Integer.valueOf(i).toString()+".jpg"));
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
 	}
-	public static void trim(int[][][] imgi,int boxsize, int i) {
+	
+	public void trim(int[][][] imgi,int boxsize, int i) {
 		int wimgi[][][] = new int[boxsize][boxsize][3];
 		BufferedImage write = new BufferedImage(boxsize,boxsize, BufferedImage.TYPE_INT_RGB);
 		for (int j=0; j<boxsize*boxsize*3; j++) {
@@ -186,125 +219,17 @@ public class mozaiku {
 			write.setRGB(w, h, rgb(wimgi[w][h][0],wimgi[w][h][1],wimgi[w][h][2]));
 		}
 		try {
-			ImageIO.write(write, "jpg", new File(currentpath+"/result/trim/"+Integer.valueOf(i).toString()+".jpg"));
+			ImageIO.write(write, "jpg", new File(resultpath+"/trim/"+Integer.valueOf(i).toString()+".jpg"));
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
 	}
 	
-	public static ArrayList<Integer[]> compare() {
-		int boxw = widthsize/box;
-		ArrayList<Integer[]> Data =  new ArrayList<>();
-		for(int i=0;i<box*box;i++) {
-			int iw = i/box;int ih = i%box;
-			BufferedImage goalcut = new BufferedImage(boxw, boxw, BufferedImage.TYPE_INT_RGB);
-			for(int k=0; k<boxw*boxw; k++) {
-				int kw = k/boxw;int kh = k%boxw;
-				goalcut.setRGB(kw,kh ,goalimg.getRGB(iw*box+kw, ih*box+kh) );
-			}
-			for(int j =0;j<box*box;j++) {
-				ArrayList<Integer[]> data2= new ArrayList<>();
-				int jw = j/boxw;int jh = j%boxw;
-				BufferedImage startcut = new BufferedImage(boxw, boxw, BufferedImage.TYPE_INT_RGB);
-				BufferedImage changecut = new BufferedImage(boxw, boxw, BufferedImage.TYPE_INT_RGB);
-				for(int k=0; k<boxw*boxw; k++) {
-					int kw = k/boxw;int kh = k%boxw;
-					startcut.setRGB(kw,kh ,startimg.getRGB(jw*box+kw, jh*box+kh));
-					changecut.setRGB(kw, kh,changeimg.getRGB(jw*box+kw, jh*box+kh));
-				}//通常の比較
-				float result0 =  hist.hist1(startcut, changecut, goalcut);
-				Integer[] data0 = {(int) result0,i,j,0};
-				Data.add(data0);
-				for(int k=0; k<boxw*boxw; k++) {
-					int kw = k/boxw;int kh = k%boxw;
-					startcut.setRGB(boxw-kh-1,kw ,startimg.getRGB(jw*box+kw, jh*box+kh));
-					changecut.setRGB(boxw-kh-1, kw,changeimg.getRGB(jw*box+kw, jh*box+kh));
-				}//90度回転
-				float result90 =  hist.hist1(startcut, changecut, goalcut);
-				Integer[] data90 = {(int) result90,i,j,0};
-				Data.add(data90);
-				for(int k=0; k<boxw*boxw; k++) {
-					int kw = k/boxw;int kh = k%boxw;
-					startcut.setRGB(boxw-kw-1,boxw-kh-1,startimg.getRGB(jw*box+kw, jh*box+kh));
-					changecut.setRGB(boxw-kw-1,boxw-kh-1,changeimg.getRGB(jw*box+kw, jh*box+kh));
-				}//180度回転
-				float result180 =  hist.hist1(startcut, changecut, goalcut);
-				Integer[] data180 = {(int) result180,i,j,180};
-				Data.add(data180);
-				for(int k=0; k<boxw*boxw; k++) {
-					int kw = k/boxw;int kh = k%boxw;
-					startcut.setRGB(kh,boxw-kw-1 ,startimg.getRGB(jw*box+kw, jh*box+kh));
-					changecut.setRGB(kh,boxw-kw-1,changeimg.getRGB(jw*box+kw, jh*box+kh));
-				}//270度回転
-				float result270 =  hist.hist1(startcut, changecut, goalcut);
-				Integer[] data270 = {(int) result270,i,j,0};
-				Data.add(data270);
-			}
-			
-		}
-		return Data;
-	}
-	public static ArrayList<Integer[]> compareint() {
-		int boxw = widthsize/box;
-		//int cboxew = 
-		System.out.println(startcanny.length);
-		ArrayList<Integer[]> Data =  new ArrayList<>();
-		for(int i=0;i<box*box;i++) {
-			int iw = i/box;int ih = i%box;
-			int[][][] goalcut = new int[boxw][boxw][3];
-			//int[][][] goalcannycut = new int[][][];
-			for(int k=0; k<boxw*boxw; k++) {
-				int kw = k/boxw;int kh = k%boxw;
-				goalcut[kw][kh][0]=goalimgi[iw*boxw+kw][ih*boxw+kh][0];goalcut[kw][kh][1]=goalimgi[iw*boxw+kw][ih*boxw+kh][1];goalcut[kw][kh][2]=goalimgi[iw*boxw+kw][ih*boxw+kh][2];
-			}
-			for(int j =0;j<box*box;j++) {
-				int jw = j/box;int jh = j%box;
-				int[][][] startcut = new int[boxw][boxw][3];
-				int[][][] changecut = new int[boxw][boxw][3];
-				for(int k=0; k<boxw*boxw*3; k++) {
-					int kw = (k/boxw)%boxw;int kh = k%boxw;int kc = k/boxw/boxw;
-					startcut[kw][kh][kc]=startimgi[jw*boxw+kw][jh*boxw+kh][kc];
-					changecut[kw][kh][kc]=changeimgi[jw*boxw+kw][jh*boxw+kh][kc];
-				}//通常の比較
-				float result0 =  hist.hist1(startcut, changecut, goalcut);
-				Integer[] data0 = {(int) result0,i,j,0};
-				Data.add(data0);
-				for(int k=0; k<boxw*boxw*3; k++) {
-					int kw = (k/boxw)%boxw;int kh = k%boxw;int kc = k/boxw/boxw;
-					startcut[boxw-kh-1][kw][kc]=startimgi[jw*boxw+kw][jh*boxw+kh][kc];
-					changecut[boxw-kh-1][kw][kc]=changeimgi[jw*boxw+kw][jh*boxw+kh][kc];
-					
-				}//90度回転
-				float result90 =  hist.hist1(startcut, changecut, goalcut);
-				Integer[] data90 = {(int) result90,i,j,90};
-				Data.add(data90);
-				for(int k=0; k<boxw*boxw*3; k++) {
-					int kw = (k/boxw)%boxw;int kh = k%boxw;int kc = k/boxw/boxw;
-					
-					startcut[boxw-kw-1][boxw-kh-1][kc]=startimgi[jw*boxw+kw][jh*boxw+kh][kc];
-					changecut[boxw-kw-1][boxw-kh-1][kc]=changeimgi[jw*boxw+kw][jh*boxw+kh][kc];
-				}//180度回転
-				float result180 =  hist.hist1(startcut, changecut, goalcut);
-				Integer[] data180 = {(int) result180,i,j,180};
-				Data.add(data180);
-				for(int k=0; k<boxw*boxw*3; k++) {
-					int kw = (k/boxw)%boxw;int kh = k%boxw;int kc = k/boxw/boxw;
-					
-					startcut[kh][boxw-kw-1][kc] = startimgi[jw*boxw+kw][jh*boxw+kh][kc];
-					changecut[kh][boxw-kw-1][kc] = changeimgi[jw*boxw+kw][jh*boxw+kh][kc];
-				}//270度回転
-				float result270 =  hist.hist1(startcut, changecut, goalcut);
-				Integer[] data270 = {(int) result270,i,j,270};
-				//類似度，目標画像のパーツ番号，元画像のパーツ番号，角度
-				Data.add(data270);
-			}
-			
-		}
-		return Data;
-	}
+	
+	
 	 
-	public static ArrayList<Integer[]> compareint2() {
+	public ArrayList<Integer[]> compareint2() {
 		int boxw = widthsize/box;
 		//int cboxew = 
 		ArrayList<Integer[]> Data =  new ArrayList<>();
@@ -370,7 +295,7 @@ public class mozaiku {
 	}
 
 	
-	public static void draw() {
+	public void draw() {
 		int count = 0;
 		int boxw = widthsize/box;
 		ArrayList<Integer[]> data = new ArrayList<>();
@@ -449,7 +374,7 @@ public class mozaiku {
 			completeimg.setRGB(w, h, rgb(completeimgi[w][h][0],completeimgi[w][h][1],completeimgi[w][h][2]));
 		}
 		try {
-			ImageIO.write(completeimg, "jpg", new File(currentpath+"/result/completeimg.jpg"));
+			ImageIO.write(completeimg, "jpg", new File(resultpath+"/completeimg.jpg"));
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
@@ -471,7 +396,7 @@ public class mozaiku {
 			
 		}
 		try {
-			ImageIO.write(compareimg, "jpg", new File(currentpath+"/result/compareimg.jpg"));
+			ImageIO.write(compareimg, "jpg", new File(resultpath+"/compareimg.jpg"));
 			//System.out.println(currentpath+"/../result/compareimg.jpg");
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
@@ -479,7 +404,7 @@ public class mozaiku {
 		}
 	}
 	
-	public static ArrayList<Integer[]> pickupandsort(ArrayList<Integer[]> data,int pickupparts){
+	public ArrayList<Integer[]> pickupandsort(ArrayList<Integer[]> data,int pickupparts){
 		ArrayList<Integer[]> pickdata = new ArrayList<>();
 		ArrayList<Integer[]> sortdata = new ArrayList<>();
 		for(int i=0;i<data.size();i++) {
@@ -495,7 +420,7 @@ public class mozaiku {
 		return sortdata;
 		
 	}
-	public static ArrayList<Integer[]> quicksort(ArrayList<Integer[]> data){
+	public ArrayList<Integer[]> quicksort(ArrayList<Integer[]> data){
 		ArrayList<Integer[]> ldata=new ArrayList<>();
 		ArrayList<Integer[]> rdata=new ArrayList<>();
 		ArrayList<Integer[]> quickdata=new ArrayList<>();
@@ -523,13 +448,14 @@ public class mozaiku {
 		}
 		return quickdata;
 	}
-	static  Object excecution(String startimgpaths,String goalimgpaths,String savefile) {
+	
+	Object excecution(String startimgpaths,String goalimgpaths,String savefile) {
 		long startTime = System.currentTimeMillis();
 		reset();
 		String startimgpath = startimgpaths;
 		String goalimgpath = goalimgpaths;
-		String changeimgpath = currentpath+"/result/changeimg.jpg";
-		new imgchange(startimgpath,goalimgpath);
+		String changeimgpath = resultpath+"/changeimg.jpg";
+		new imgchange(startimgpath,goalimgpath,resultpath);
 		register(startimgpath,changeimgpath,goalimgpath);
 		impoint(startimg);
 		draw();
@@ -539,18 +465,20 @@ public class mozaiku {
 		return compareimg;
 	}
 	
-	static void mozaikumain() {
+	
+	void mozaikumain() {
 		long startTime = System.currentTimeMillis();
 		reset();
 		String startimgpath = currentpath+"/../image/hosizukiyo.jpg";
 		String goalimgpath = currentpath+"/../image/pikaso.jpg";
-		String changeimgpath = currentpath+"/../result/changeimg.jpg";
-		new imgchange(startimgpath,goalimgpath);
+		String changeimgpath = resultpath+"/changeimg.jpg";
+		new imgchange(startimgpath,goalimgpath,resultpath);
 		register(startimgpath,changeimgpath,goalimgpath);
 		impoint(startimg);
 		draw();
 		long endTime = System.currentTimeMillis();
 		System.out.println("処理時間：" + (endTime - startTime) + " ms");
 	}
+	
 	
 }
