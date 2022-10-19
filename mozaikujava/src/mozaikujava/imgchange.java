@@ -16,18 +16,19 @@ import javax.imageio.ImageIO;
 public class imgchange {
 	public static int size = 400;
 	public static int border = 30;
-	public imgchange(String startimgpath,String goalimgpath) {
-		changedeviation(startimgpath,goalimgpath);
+	public imgchange(String startimgpath,String goalimgpath,String resultpath) {
+		changedeviation(startimgpath,goalimgpath,resultpath);
 	}
 	
 	public static void main(String[] args) {
 		Path path = Paths.get("");
 		String currentpath = path.toAbsolutePath().toString();
-		String startimgpath = currentpath+"/../image/hosizukiyo.jpg";
-		String goalimgpath = currentpath+"/../image/pikaso.jpg";
-		changedeviation(startimgpath,goalimgpath);
+		String startimgpath = currentpath+"/image/hosizukiyo.jpg";
+		String goalimgpath = currentpath+"/image/pikaso.jpg";
+		changedeviation(startimgpath,goalimgpath,currentpath+"/result");
 	}
-	public static void changedeviation(String startimgpath,String goalimgpath) {
+	
+	public static void changedeviation(String startimgpath,String goalimgpath,String resultpath) {
 		Path path = Paths.get("");
 		String currentpath = path.toAbsolutePath().toString();
 		BufferedImage startimg = null;
@@ -43,8 +44,8 @@ public class imgchange {
 			goalimg = new BufferedImage(size,size, BufferedImage.TYPE_3BYTE_BGR);
 			startimg.createGraphics().drawImage(sizeimgs.getScaledInstance(size, size, Image.SCALE_AREA_AVERAGING),0, 0, size, size, null);
 			goalimg.createGraphics().drawImage(sizeimgg.getScaledInstance(size, size, Image.SCALE_AREA_AVERAGING),0, 0, size, size, null);
-			ImageIO.write(startimg, "jpg", new File(currentpath+"/../result/startimg.jpg"));
-			ImageIO.write(goalimg, "jpg", new File(currentpath+"/../result/goalimg.jpg"));
+			ImageIO.write(startimg, "jpg", new File(resultpath+"/startimg.jpg"));
+			ImageIO.write(goalimg, "jpg", new File(resultpath+"/goalimg.jpg"));
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
@@ -113,7 +114,7 @@ public class imgchange {
 			startimg.setRGB(h,w,rgb);
 		}
 		try {
-			ImageIO.write(startimg, "jpg", new File(currentpath+"/../result/changeimg.jpg"));
+			ImageIO.write(startimg, "jpg", new File(resultpath+"/changeimg.jpg"));
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
